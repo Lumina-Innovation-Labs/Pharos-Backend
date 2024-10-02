@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 
 // Configuring dotenv
 import { ConfigModule } from '@nestjs/config';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -11,6 +12,7 @@ import { ConfigModule } from '@nestjs/config';
       envFilePath: '.env',
       isGlobal: true,
     }),
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
