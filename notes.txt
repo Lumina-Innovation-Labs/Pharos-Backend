@@ -1,0 +1,4 @@
+EXAMPLE OF DOCKER CONTAINER RUN TO RUN DEV DB
+
+docker container run --name pharos_dev_db -e MYSQL_ROOT_PASSWORD=12345678 -e MYSQL_DATABASE=pharos_db -p 3306:3306 -d mysql:8.0
+542abff289e7efa0d5a077705690fff3ef827c296d29ef96551b1c3c754aa910
