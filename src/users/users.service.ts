@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import * as bcrypt from 'bcrypt';
-import { CreateUserDto } from './dto/create-user.dto';
+import { CreateUserDto, UpdateUserDto } from './dto/create-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -14,8 +14,8 @@ export class UsersService {
 
   async create(createUserDto: CreateUserDto): Promise<User> {
     const { password } = createUserDto;
-    const salt = await bcrypt.genSaltSync(10);
-    const hash = await bcrypt.hashSync(password, salt);
+    const salt = bcrypt.genSaltSync(10);
+    const hash = bcrypt.hashSync(password, salt);
 
     createUserDto.password = hash;
 
@@ -27,15 +27,23 @@ export class UsersService {
     return this.usersRepository.find();
   }
 
-  findOne() {
-    return 'This action returns a user';
+  findOne(id: number): Promise<User> {
+    return this.usersRepository.findOne({ where: { id } });
   }
 
-  update() {
-    return 'This action updates a user';
+  async update(id: number, updateUserDto: UpdateUserDto): Promise<User> {
+    const user = await this.findOne(id);
+
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    const updatedUser = this.usersRepository.merge(user, updateUserDto);
+
+    return this.usersRepository.save(updatedUser);
   }
 
-  remove() {
-    return 'This action removes a user';
+  remove(id: number): Promise<void> {
+    return this.usersRepository.delete(id).then(() => undefined);
   }
 }
