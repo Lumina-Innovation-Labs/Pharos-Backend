@@ -1,13 +1,23 @@
-import { Controller, Get, Post, Patch, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Patch,
+  Delete,
+  Body,
+  Param,
+  ParseIntPipe,
+} from '@nestjs/common';
 import { ThreadsService } from './threads.service';
+import { CreateThreadDto } from './dto/create-thread.dto';
 
 @Controller('threads')
 export class ThreadsController {
   constructor(private readonly threadsService: ThreadsService) {}
 
   @Post()
-  create() {
-    return this.threadsService.create();
+  create(@Body() createThreadDto: CreateThreadDto) {
+    return this.threadsService.create(createThreadDto);
   }
 
   @Get()
@@ -16,17 +26,20 @@ export class ThreadsController {
   }
 
   @Get(':id')
-  findOne() {
-    return this.threadsService.findOne();
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.threadsService.findOne(id);
   }
 
   @Patch(':id')
-  update() {
-    return this.threadsService.update();
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateThreadDto: CreateThreadDto,
+  ) {
+    return this.threadsService.update(id, updateThreadDto);
   }
 
   @Delete(':id')
-  remove() {
-    return this.threadsService.remove();
+  remove(@Param('id', ParseIntPipe) id: number) {
+    return this.threadsService.remove(id);
   }
 }
