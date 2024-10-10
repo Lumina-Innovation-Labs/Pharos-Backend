@@ -1,24 +1,42 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Thread } from './entities/thread.entity';
+import { CreateThreadDto } from './dto/create-thread.dto';
 
 @Injectable()
 export class ThreadsService {
-  create() {
-    return 'This action adds a new thread';
+  constructor(
+    @InjectRepository(Thread)
+    private threadsRepository: Repository<Thread>,
+  ) {}
+
+  async create(createThreadDto: CreateThreadDto): Promise<Thread> {
+    const newThread = this.threadsRepository.create(createThreadDto);
+    return this.threadsRepository.save(newThread);
   }
 
-  findAll() {
-    return `This action returns all threads`;
+  findAll(): Promise<Thread[]> {
+    return this.threadsRepository.find();
   }
 
-  findOne() {
-    return `This action returns a thread`;
+  findOne(id: number): Promise<Thread> {
+    return this.threadsRepository.findOne({ where: { id } });
   }
 
-  update() {
-    return `This action updates a thread`;
+  async update(id: number, updateThreadDto: CreateThreadDto): Promise<Thread> {
+    const thread = await this.findOne(id);
+
+    if (!thread) {
+      throw new Error('Thread not found');
+    }
+
+    const updatedThread = this.threadsRepository.merge(thread, updateThreadDto);
+
+    return this.threadsRepository.save(updatedThread);
   }
 
-  remove() {
-    return `This action removes a thread`;
+  remove(id: number): Promise<void> {
+    return this.threadsRepository.delete(id).then(() => undefined);
   }
 }
