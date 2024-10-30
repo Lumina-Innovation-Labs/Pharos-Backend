@@ -5,6 +5,7 @@ import { User } from './entities/user.entity';
 import * as bcrypt from 'bcrypt';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { plainToInstance } from 'class-transformer';
 
 @Injectable()
 export class UsersService {
@@ -21,15 +22,23 @@ export class UsersService {
     createUserDto.password = hash;
 
     const newUser = this.usersRepository.create(createUserDto);
-    return this.usersRepository.save(newUser);
+    const savedUser = await this.usersRepository.save(newUser);
+    return plainToInstance(User, savedUser);
   }
 
-  findAll(): Promise<User[]> {
-    return this.usersRepository.find();
+  async findAll(): Promise<User[]> {
+    const users = await this.usersRepository.find();
+    return users.map((user) => plainToInstance(User, user));
   }
 
-  findOne(id: number): Promise<User> {
-    return this.usersRepository.findOne({ where: { id } });
+  async findOne(id: number): Promise<User> {
+    const user = await this.usersRepository.findOne({ where: { id } });
+
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    return plainToInstance(User, user);
   }
 
   async update(id: number, updateUserDto: UpdateUserDto): Promise<User> {
@@ -41,7 +50,9 @@ export class UsersService {
 
     const updatedUser = this.usersRepository.merge(user, updateUserDto);
 
-    return this.usersRepository.save(updatedUser);
+    const savedUser = await this.usersRepository.save(updatedUser);
+
+    return plainToInstance(User, savedUser);
   }
 
   remove(id: number): Promise<void> {
@@ -55,6 +66,6 @@ export class UsersService {
       throw new Error('User not found');
     }
 
-    return user;
+    return plainToInstance(User, user);
   }
 }
