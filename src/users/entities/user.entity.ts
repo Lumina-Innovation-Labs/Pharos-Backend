@@ -1,6 +1,6 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
-import { Exclude, Expose } from 'class-transformer';
+import { Expose } from 'class-transformer';
 import { Thread } from 'src/threads/entities/thread.entity';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class User {
@@ -8,15 +8,15 @@ export class User {
   id: number;
 
   @Column()
-  @Expose({ name: 'user_name' })
+  @Expose({ name: 'name' })
   name: string;
 
   @Column({ unique: true })
-  @Expose({ name: 'user_email' })
+  @Expose({ name: 'email' })
   email: string;
 
   @Column()
-  @Exclude()
+  @Expose({ name: 'password' })
   password: string;
 
   @OneToMany(() => Thread, (thread) => thread.user)
