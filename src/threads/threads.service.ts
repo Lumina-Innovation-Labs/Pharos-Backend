@@ -18,11 +18,14 @@ export class ThreadsService {
   }
 
   findAll(): Promise<Thread[]> {
-    return this.threadsRepository.find();
+    return this.threadsRepository.find({ relations: ['messages'] });
   }
 
   findOne(id: number): Promise<Thread> {
-    return this.threadsRepository.findOne({ where: { id } });
+    return this.threadsRepository.findOne({
+      where: { id },
+      relations: ['messages'],
+    });
   }
 
   async update(id: number, updateThreadDto: CreateThreadDto): Promise<Thread> {
