@@ -17,7 +17,13 @@ export class ThreadsService {
     return this.threadsRepository.save(newThread);
   }
 
-  findAll(): Promise<Thread[]> {
+  findAll(userId?: number): Promise<Thread[]> {
+    if (userId) {
+      return this.threadsRepository.find({
+        where: { id_user: userId },
+        relations: ['messages'],
+      });
+    }
     return this.threadsRepository.find({ relations: ['messages'] });
   }
 

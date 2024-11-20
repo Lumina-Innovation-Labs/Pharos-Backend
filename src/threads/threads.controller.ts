@@ -7,6 +7,7 @@ import {
   Body,
   Param,
   ParseIntPipe,
+  Query,
 } from '@nestjs/common';
 import { ThreadsService } from './threads.service';
 import { CreateThreadDto } from './dto/create-thread.dto';
@@ -21,8 +22,8 @@ export class ThreadsController {
   }
 
   @Get()
-  findAll() {
-    return this.threadsService.findAll();
+  findAll(@Query('id_user') userId: number) {
+    return this.threadsService.findAll(userId);
   }
 
   @Get(':id')
