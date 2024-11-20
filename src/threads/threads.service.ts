@@ -12,6 +12,7 @@ export class ThreadsService {
   ) {}
 
   async create(createThreadDto: CreateThreadDto): Promise<Thread> {
+    createThreadDto.timestamp = new Date().toISOString();
     const newThread = this.threadsRepository.create(createThreadDto);
     return this.threadsRepository.save(newThread);
   }

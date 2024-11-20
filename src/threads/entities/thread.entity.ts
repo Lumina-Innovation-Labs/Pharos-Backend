@@ -19,6 +19,9 @@ export class Thread {
   @Column()
   title: string;
 
+  @Column()
+  timestamp: string;
+
   // Relationships
   @ManyToOne(() => User, (user) => user.threads)
   @JoinColumn({ name: 'id_user' })
