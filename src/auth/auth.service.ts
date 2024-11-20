@@ -26,9 +26,12 @@ export class AuthService {
     };
   }
 
-  async login(
-    loginUserDto: LoginUserDto,
-  ): Promise<{ access_token: string; refresh_token: string; user_id: string }> {
+  async login(loginUserDto: LoginUserDto): Promise<{
+    access_token: string;
+    refresh_token: string;
+    user_id: string;
+    name: string;
+  }> {
     const { email, password } = loginUserDto;
 
     const user = await this.usersService.findByEmail(email);
@@ -51,7 +54,12 @@ export class AuthService {
       expiresIn: this.jwtConstants.refresh_token_expiration_time,
     });
 
-    return { access_token, refresh_token, user_id: user.id.toString() };
+    return {
+      access_token,
+      refresh_token,
+      user_id: user.id.toString(),
+      name: user.name,
+    };
   }
 
   async refreshAccessToken(
