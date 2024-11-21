@@ -12,8 +12,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MessagesModule } from './messages/messages.module';
 import { UsersModule } from './users/users.module';
 import { ThreadsModule } from './threads/threads.module';
-import { AuthModule } from './auth/auth.module';
 import { JwtModule } from '@nestjs/jwt';
+import { AxiosModule } from './common/axios/axios.module';
 
 @Module({
   imports: [
@@ -26,11 +26,11 @@ import { JwtModule } from '@nestjs/jwt';
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
         type: 'mysql',
-        host: configService.get('DB_HOST'),
-        port: parseInt(configService.get('DB_PORT')),
-        username: configService.get('DB_USER'),
-        password: configService.get('DB_PASSWORD'),
-        database: configService.get('DB_DATABASE'),
+        host: configService.get<string>('DB_HOST') || 'localhost',
+        port: configService.get<number>('DB_PORT') || 3306,
+        username: configService.get<string>('DB_USER') || 'root',
+        password: configService.get<string>('DB_PASSWORD') || '12345678',
+        database: configService.get<string>('DB_DATABASE') || 'pharos_dev_db',
         entities: ['dist/**/*.entity{.ts,.js}'],
         synchronize: true,
       }),
@@ -38,8 +38,8 @@ import { JwtModule } from '@nestjs/jwt';
     UsersModule,
     ThreadsModule,
     MessagesModule,
-    AuthModule,
     JwtModule,
+    AxiosModule,
   ],
   controllers: [AppController],
   providers: [AppService],

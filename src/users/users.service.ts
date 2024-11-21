@@ -5,7 +5,6 @@ import { User } from './entities/user.entity';
 import * as bcrypt from 'bcrypt';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { plainToInstance } from 'class-transformer';
 
 @Injectable()
 export class UsersService {
@@ -23,22 +22,21 @@ export class UsersService {
 
     const newUser = this.usersRepository.create(createUserDto);
     const savedUser = await this.usersRepository.save(newUser);
-    return plainToInstance(User, savedUser);
+    return savedUser;
   }
 
-  async findAll(): Promise<User[]> {
-    const users = await this.usersRepository.find();
-    return users.map((user) => plainToInstance(User, user));
+  findAll(): Promise<User[]> {
+    return this.usersRepository.find();
   }
 
   async findOne(id: number): Promise<User> {
-    const user = await this.usersRepository.findOne({ where: { id } });
+    const user = await this.usersRepository.findOneOrFail({ where: { id } });
 
     if (!user) {
       throw new Error('User not found');
     }
 
-    return plainToInstance(User, user);
+    return user;
   }
 
   async update(id: number, updateUserDto: UpdateUserDto): Promise<User> {
@@ -52,11 +50,16 @@ export class UsersService {
 
     const savedUser = await this.usersRepository.save(updatedUser);
 
-    return plainToInstance(User, savedUser);
+    return savedUser;
   }
 
-  remove(id: number): Promise<void> {
-    return this.usersRepository.delete(id).then(() => undefined);
+  async remove(id: number): Promise<{ message: string }> {
+    try {
+      await this.usersRepository.delete(id);
+      return { message: 'User deleted' };
+    } catch {
+      throw new Error('User not found');
+    }
   }
 
   async findByEmail(email: string): Promise<User> {
@@ -66,6 +69,6 @@ export class UsersService {
       throw new Error('User not found');
     }
 
-    return plainToInstance(User, user);
+    return user;
   }
 }

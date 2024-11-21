@@ -1,9 +1,12 @@
 import { Injectable } from '@nestjs/common';
+import { AxiosService } from 'src/common/axios/axios.service';
+import { CreateMessageDto } from './dto/create-message.dto';
 
 @Injectable()
 export class MessagesService {
-  create() {
-    return 'This action adds a new message';
+  constructor(private readonly axiosService: AxiosService) {}
+  create(createMessageDto: CreateMessageDto) {
+    return this.axiosService.testApi(createMessageDto.prompt);
   }
 
   findAll() {

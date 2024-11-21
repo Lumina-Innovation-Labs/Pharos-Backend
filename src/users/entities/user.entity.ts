@@ -5,6 +5,7 @@ import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
+  @Expose({ name: 'id' })
   id: number;
 
   @Column()
