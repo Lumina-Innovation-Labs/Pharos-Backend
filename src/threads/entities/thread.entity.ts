@@ -16,10 +16,10 @@ export class Thread {
   id: number;
 
   @Column()
-  id_user: number;
+  title: string;
 
   @Column()
-  title: string;
+  timestamp: string;
 
   // Relationships
   @ManyToOne(() => User, (user) => user.threads)

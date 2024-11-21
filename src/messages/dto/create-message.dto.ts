@@ -1,6 +1,14 @@
-import { IsString } from 'class-validator';
+import { IsInt, IsNotEmpty } from 'class-validator';
 
 export class CreateMessageDto {
-  @IsString()
-  prompt: string;
+  @IsInt()
+  @IsNotEmpty()
+  id_thread: number;
+
+  @IsNotEmpty()
+  content: string;
+
+  from_user: boolean;
+
+  timestamp: string;
 }

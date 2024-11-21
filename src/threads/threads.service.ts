@@ -12,16 +12,26 @@ export class ThreadsService {
   ) {}
 
   async create(createThreadDto: CreateThreadDto): Promise<Thread> {
+    createThreadDto.timestamp = new Date().toISOString();
     const newThread = this.threadsRepository.create(createThreadDto);
     return this.threadsRepository.save(newThread);
   }
 
-  findAll(): Promise<Thread[]> {
-    return this.threadsRepository.find();
+  findAll(userId?: number): Promise<Thread[]> {
+    if (userId) {
+      return this.threadsRepository.find({
+        where: { id_user: userId },
+        relations: ['messages'],
+      });
+    }
+    return this.threadsRepository.find({ relations: ['messages'] });
   }
 
   findOne(id: number): Promise<Thread> {
-    return this.threadsRepository.findOne({ where: { id } });
+    return this.threadsRepository.findOne({
+      where: { id },
+      relations: ['messages'],
+    });
   }
 
   async update(id: number, updateThreadDto: CreateThreadDto): Promise<Thread> {
