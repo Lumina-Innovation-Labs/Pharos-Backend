@@ -7,8 +7,8 @@ import { firstValueFrom } from 'rxjs';
 export class AxiosService {
   constructor(private readonly httpService: HttpService) {}
 
-  async testApi(prompt: string): Promise<AxiosResponse<{ message: string }>> {
-    const response = this.httpService.post('/ollama/', { prompt });
+  async testApi(content: string): Promise<{ response: string }> {
+    const response = this.httpService.post('/ollama/', { prompt: content });
 
     const resolvedResponse = await firstValueFrom(response);
 

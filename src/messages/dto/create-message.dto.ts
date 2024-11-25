@@ -1,4 +1,4 @@
-import { IsInt, IsNotEmpty } from 'class-validator';
+import { IsInt, IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateMessageDto {
   @IsInt()
@@ -6,9 +6,6 @@ export class CreateMessageDto {
   id_thread: number;
 
   @IsNotEmpty()
+  @IsString()
   content: string;
-
-  from_user: boolean;
-
-  timestamp: string;
 }

@@ -30,7 +30,7 @@ import { AxiosModule } from './common/axios/axios.module';
         port: configService.get<number>('DB_PORT') || 3306,
         username: configService.get<string>('DB_USER') || 'root',
         password: configService.get<string>('DB_PASSWORD') || '12345678',
-        database: configService.get<string>('DB_DATABASE') || 'pharos_dev_db',
+        database: configService.get<string>('DB_DATABASE') || 'pharos_db',
         entities: ['dist/**/*.entity{.ts,.js}'],
         synchronize: true,
       }),

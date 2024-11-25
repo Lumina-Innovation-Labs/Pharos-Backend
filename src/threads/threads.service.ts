@@ -3,24 +3,32 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Thread } from './entities/thread.entity';
 import { CreateThreadDto } from './dto/create-thread.dto';
+import { User } from 'src/users/entities/user.entity';
 
 @Injectable()
 export class ThreadsService {
   constructor(
     @InjectRepository(Thread)
     private threadsRepository: Repository<Thread>,
+    @InjectRepository(User)
+    private usersRepository: Repository<User>,
   ) {}
 
   async create(createThreadDto: CreateThreadDto): Promise<Thread> {
-    createThreadDto.timestamp = new Date().toISOString();
-    const newThread = this.threadsRepository.create(createThreadDto);
+    const newThread = this.threadsRepository.create({
+      ...createThreadDto,
+      timestamp: new Date().toISOString(),
+    });
     return this.threadsRepository.save(newThread);
   }
 
-  findAll(userId?: number): Promise<Thread[]> {
+  async findAll(userId?: number): Promise<Thread[]> {
     if (userId) {
+      const user = await this.usersRepository.findOneOrFail({
+        where: { id: userId },
+      });
       return this.threadsRepository.find({
-        where: { id_user: userId },
+        where: { user },
         relations: ['messages'],
       });
     }

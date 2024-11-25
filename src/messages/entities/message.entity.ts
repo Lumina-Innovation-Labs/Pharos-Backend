@@ -13,10 +13,13 @@ export class Message {
   id: number;
 
   @Column()
-  text: string;
+  content: string;
 
   @Column()
   isUserMessage: boolean;
+
+  @Column('datetime')
+  timestamp: Date;
 
   // Relationships
   @ManyToOne(() => Thread, (thread) => thread.messages)

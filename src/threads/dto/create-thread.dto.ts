@@ -7,6 +7,4 @@ export class CreateThreadDto {
 
   @IsNotEmpty()
   title: string;
-
-  timestamp: string;
 }

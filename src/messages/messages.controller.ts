@@ -2,8 +2,6 @@ import {
   Controller,
   Get,
   Post,
-  Patch,
-  Delete,
   Body,
   ParseIntPipe,
   Param,
@@ -28,18 +26,5 @@ export class MessagesController {
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.messagesService.findOne(id);
-  }
-
-  @Patch(':id')
-  update(
-    @Param('id', ParseIntPipe) id: number,
-    @Body() updateMessageDto: CreateMessageDto,
-  ) {
-    return this.messagesService.update(id, updateMessageDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id', ParseIntPipe) id: number) {
-    return this.messagesService.remove(id);
   }
 }
