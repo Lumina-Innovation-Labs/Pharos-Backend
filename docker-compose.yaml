@@ -1,0 +1,36 @@
+services:
+  database:
+    container_name: pharos-database
+    restart: always
+    image: mysql:8.0
+    ports:
+      - '3306:3306'
+    env_file:
+      - .env
+    volumes:
+      - ./volumes/mysql_data:/var/lib/mysql
+    networks:
+      - pharos-network
+
+  api:
+    container_name: pharos-api
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '5000:5000'
+    env_file:
+      - .env
+    networks:
+      - pharos-network
+    depends_on:
+      - database
+
+volumes:
+  mysql_data:
+
+networks:
+  pharos-network:
+    name: pharos-network
+    driver: bridge
