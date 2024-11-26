@@ -1,19 +1,20 @@
 import {
-  Controller,
-  Get,
-  Post,
-  Patch,
-  Delete,
   Body,
+  ClassSerializerInterceptor,
+  Controller,
+  Delete,
+  Get,
   Param,
   ParseIntPipe,
+  Patch,
+  Post,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
-import { UseInterceptors, ClassSerializerInterceptor } from '@nestjs/common';
-import { UsersService } from './users.service';
+import { AuthGuard } from 'src/auth/auth.guard';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { AuthGuard } from '@nestjs/passport';
+import { UsersService } from './users.service';
 
 @Controller('users')
 @UseInterceptors(ClassSerializerInterceptor)
