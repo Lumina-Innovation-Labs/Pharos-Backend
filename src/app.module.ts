@@ -14,6 +14,7 @@ import { UsersModule } from './users/users.module';
 import { ThreadsModule } from './threads/threads.module';
 import { JwtModule } from '@nestjs/jwt';
 import { AxiosModule } from './common/axios/axios.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -40,6 +41,7 @@ import { AxiosModule } from './common/axios/axios.module';
     MessagesModule,
     JwtModule,
     AxiosModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
