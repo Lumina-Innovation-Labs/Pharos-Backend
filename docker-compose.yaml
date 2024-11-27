@@ -8,7 +8,13 @@ services:
     env_file:
       - .env
     volumes:
-      - ./volumes/mysql_data:/var/lib/mysql
+      - /volumes/mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ['CMD', 'mysqladmin', 'ping', '-h', 'localhost']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
     networks:
       - pharos-network
 
@@ -25,7 +31,21 @@ services:
     networks:
       - pharos-network
     depends_on:
-      - database
+      database:
+        condition: service_healthy
+
+  pipeline:
+    container_name: pharos-pipeline
+    restart: always
+    build:
+      context: ../Pharos-Pipeline
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    networks:
+      - pharos-network
+    ports:
+      - '5001:5001'
 
 volumes:
   mysql_data:
