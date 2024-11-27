@@ -1,3 +1,4 @@
+import { Thread } from 'src/threads/entities/thread.entity';
 import {
   Column,
   Entity,
@@ -5,12 +6,15 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Thread } from '../../threads/entities/thread.entity';
 
 @Entity()
 export class Message {
-  @PrimaryGeneratedColumn('increment')
+  // Attributes
+  @PrimaryGeneratedColumn()
   id: number;
+
+  @Column()
+  id_thread: number;
 
   @Column()
   content: string;
@@ -18,10 +22,9 @@ export class Message {
   @Column()
   isUserMessage: boolean;
 
-  @Column('datetime')
-  timestamp: Date;
+  @Column()
+  timestamp: string;
 
-  // Relationships
   @ManyToOne(() => Thread, (thread) => thread.messages)
   @JoinColumn({ name: 'id_thread' })
   thread: Thread;

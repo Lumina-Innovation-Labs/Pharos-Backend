@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { Thread } from './entities/thread.entity';
-import { CreateThreadDto } from './dto/create-thread.dto';
 import { User } from 'src/users/entities/user.entity';
+import { Repository } from 'typeorm';
+import { CreateThreadDto } from './dto/create-thread.dto';
+import { Thread } from './entities/thread.entity';
 
 @Injectable()
 export class ThreadsService {
@@ -24,11 +24,8 @@ export class ThreadsService {
 
   async findAll(userId?: number): Promise<Thread[]> {
     if (userId) {
-      const user = await this.usersRepository.findOneOrFail({
-        where: { id: userId },
-      });
       return this.threadsRepository.find({
-        where: { user },
+        where: { id_user: userId },
         relations: ['messages'],
       });
     }

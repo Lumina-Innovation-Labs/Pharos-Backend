@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { AxiosService } from 'src/common/axios/axios.service';
-import { CreateMessageDto } from './dto/create-message.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Message } from './entities/message.entity';
-import { Repository } from 'typeorm';
+import { AxiosService } from 'src/common/axios/axios.service';
 import { Thread } from 'src/threads/entities/thread.entity';
+import { Repository } from 'typeorm';
+import { CreateMessageDto } from './dto/create-message.dto';
+import { Message } from './entities/message.entity';
 
 @Injectable()
 export class MessagesService {
@@ -23,7 +23,7 @@ export class MessagesService {
 
     const message = this.messageRepository.create({
       ...createMessageDto,
-      timestamp: new Date(),
+      timestamp: new Date().toISOString(),
       isUserMessage: true,
       thread,
     });
@@ -36,9 +36,9 @@ export class MessagesService {
 
     const messageResponse = this.messageRepository.create({
       content: response,
-      timestamp: new Date(),
+      timestamp: new Date().toISOString(),
       isUserMessage: false,
-      thread,
+      id_thread: createMessageDto.id_thread,
     });
 
     this.messageRepository.save(messageResponse);

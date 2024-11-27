@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
+import * as bcrypt from 'bcrypt';
 import { User } from 'src/users/entities/user.entity';
 import { Repository } from 'typeorm';
 import { LoginDto } from './dto/login.dto';
-import { JwtService } from '@nestjs/jwt';
-import { ConfigService } from '@nestjs/config';
 import { TokenPayload } from './types/token-payload';
-import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
@@ -70,6 +70,8 @@ export class AuthService {
 
     return {
       accessToken,
+      user_id: user.id,
+      name: user.name,
     };
   }
 }
