@@ -16,7 +16,7 @@ export class Message {
   @Column()
   id_thread: number;
 
-  @Column()
+  @Column({ type: 'longtext' })
   content: string;
 
   @Column()
